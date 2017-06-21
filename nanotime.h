@@ -37,6 +37,8 @@ private:
     std::chrono::nanoseconds dur{0};
     std::vector<std::string> input;
 public:
+
+#if __cplusplus >= 201402L
     template<class... Ts>
     explicit nanotime(Ts&&... args)
     {
@@ -44,6 +46,7 @@ public:
         int dummy[] = { 0, (input.emplace_back(std::forward<Ts>(args)), 0)... };
         (void)dummy;
     }
+#endif
 
     template<class T, typename = typename std::enable_if<std::is_same<T, std::vector<std::string>>::value>>
     explicit nanotime(T&& vec)
@@ -56,7 +59,7 @@ public:
     nanotime(const nanotime&) = default;
     nanotime& operator=(const nanotime&) = default;
 
-    inline auto get_duration() const noexcept { return dur; }
+    auto get_duration() const noexcept -> std::chrono::nanoseconds { return dur; }
 
     void execute();
 };
@@ -67,8 +70,8 @@ void nanotime::execute()
     int status;
 
     std::vector<const char*> argv(input.size());
-    std::transform(std::cbegin(input), std::cend(input), argv.begin(),
-                   [](const auto& e) { return e.c_str(); });
+    std::transform(std::begin(input), std::end(input), argv.begin(),
+                   [](const std::string& c) { return c.c_str(); });
 
     argv.push_back(nullptr);
 

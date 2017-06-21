@@ -33,14 +33,14 @@ int main(int argc, char* argv[])
  }
  ```
 
-3. compile: `g++ -o test -std=c++1z test.cpp`
+3. compile: `g++ -o test test.cpp`
 4. execute: `./test /usr/bin/ls ls -la`
 
 see `example.cpp` for more details.
 
 ## Dependencies
 
-none.
+C++11 or later.
 
 ## License 
 
